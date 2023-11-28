@@ -14,30 +14,27 @@ public class Solution : Solver
     public object PartOne()
     {
         var coordinate = Coordinate2D.Origin;
-        var locations = new Dictionary<Coordinate2D, int> { { coordinate, 1 } };
+        var locations = new HashSet<Coordinate2D>{ coordinate };
         foreach (var direction in instructions.Select(ParseInstruction))
         {
             coordinate = coordinate.Add(direction);
-            locations.TryGetValue(coordinate, out var times);
-            locations[coordinate] = times + 1;
+            locations.Add(coordinate);
         }
 
-        return locations.Count();
+        return locations.Count;
     }
 
     public object PartTwo()
     {
-        var santa = Coordinate2D.Origin;
-        var roboSanta = Coordinate2D.Origin;
         var listenerCoordinate = new Dictionary<int, Coordinate2D>
         {
-            { 0, santa },
-            { 1, roboSanta }
+            { 0, Coordinate2D.Origin },
+            { 1, Coordinate2D.Origin }
         };
 
-        var santaLocations = new Dictionary<Coordinate2D, int> { { santa, 1 } };
-        var roboSantaLocations = new Dictionary<Coordinate2D, int> { { roboSanta, 1 } };
-        var allLocations = new Dictionary<int, Dictionary<Coordinate2D, int>>
+        var santaLocations = new HashSet<Coordinate2D> { Coordinate2D.Origin };
+        var roboSantaLocations = new HashSet<Coordinate2D> { Coordinate2D.Origin };
+        var allLocations = new Dictionary<int, HashSet<Coordinate2D>>
         {
             { 0, santaLocations },
             { 1, roboSantaLocations },
@@ -47,20 +44,15 @@ public class Solution : Solver
         {
             var direction = ParseInstruction(instructions[i]);
             var current = i % 2;
+
             var coordinate = listenerCoordinate[current];
             coordinate = coordinate.Add(direction);
             listenerCoordinate[current] = coordinate;
 
-            allLocations[current]
-                .TryGetValue(coordinate, out var times);
-            allLocations[current][coordinate] = times + 1;
+            allLocations[current].Add(coordinate);
         }
 
-        var foo = allLocations[0]
-            .Keys.ToList();
-        var bar = allLocations[1]
-            .Keys.ToList();
-        return foo.Concat(bar)
+        return allLocations[0].Concat(allLocations[1])
             .ToHashSet()
             .Count;
     }
