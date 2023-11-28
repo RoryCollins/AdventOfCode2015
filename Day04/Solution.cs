@@ -27,8 +27,10 @@ public class Solution : Solver
     private object FindSuffix(string prefix)
     {
         var q = new ConcurrentQueue<int>();
+
+        var range = Enumerable.Range(1, int.MaxValue).AsParallel();
         Parallel.ForEach(
-            Numbers(),
+            range,
             MD5.Create,
             (i, state, md5) =>
             {
@@ -45,11 +47,4 @@ public class Solution : Solver
             _ => { });
         return q.Min();
     }
-
-    IEnumerable<int> Numbers() {
-        for (int i=0; ;i++) {
-            yield return i;
-        }
-    }
-
 }
