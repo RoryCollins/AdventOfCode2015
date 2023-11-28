@@ -2,38 +2,29 @@ namespace Day01;
 
 public class Solution
 {
-    private readonly List<char> chars = File
-        .ReadAllText("input.txt")
-        .ToCharArray()
-        .ToList();
+    private readonly string chars = File
+        .ReadAllText("input.txt");
 
     public string PartOne()
     {
-        var ascensions = chars.Count(x => x == '(');
-        var descents = chars.Count(x => x == ')');
-        return $"{ascensions - descents}!";
+        return Levels(chars).Last().level.ToString();
     }
 
     public string PartTwo()
     {
+        return Levels(chars)
+            .First(i => i.level == -1)
+            .idx.ToString();
+
+    }
+
+    private static IEnumerable<(int idx, int level)> Levels(string input)
+    {
+        var idx = 0;
         var level = 0;
-        for (var i = 0; i < chars.Count; i++)
+        foreach (var c in input)
         {
-            if (chars[i] == '(')
-            {
-                level++;
-            }
-            else
-            {
-                level--;
-            }
-
-            if (level == -1)
-            {
-                return i+1.ToString();
-            }
+            yield return (idx++, level += c == '(' ? 1 : -1);
         }
-
-        return "NOT FOUND";
     }
 }
