@@ -1,30 +1,32 @@
 namespace Day01;
 
-public class Solution
+using Shared;
+
+public class Solution : Solver
 {
     private readonly string chars = File
         .ReadAllText("input.txt");
 
-    public string PartOne()
+    public object PartOne()
     {
-        return Levels(chars).Last().level.ToString();
+        return Levels(chars).Last().level;
     }
 
-    public string PartTwo()
+    public object PartTwo()
     {
         return Levels(chars)
             .First(i => i.level == -1)
-            .idx.ToString();
+            .index + 1;
 
     }
 
-    private static IEnumerable<(int idx, int level)> Levels(string input)
+    private static IEnumerable<(int index, int level)> Levels(string input)
     {
-        var idx = 0;
+        var index = 0;
         var level = 0;
         foreach (var c in input)
         {
-            yield return (idx++, level += c == '(' ? 1 : -1);
+            yield return (index++, level += c == '(' ? 1 : -1);
         }
     }
 }
