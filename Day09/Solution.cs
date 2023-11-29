@@ -1,5 +1,7 @@
 namespace Day09;
 
+using Shared;
+
 public class Solution
 {
     private readonly Dictionary<string, Dictionary<string, int>> graph = new();
@@ -34,7 +36,7 @@ public class Solution
 
     private int GetBestRoute(Func<int, int, int> comparison)
     {
-        var routes = Permute(new List<string>(), locations.ToArray());
+        var routes = locations.Permute();
         var currentBest = 0;
         foreach (var route in routes)
         {
@@ -49,13 +51,5 @@ public class Solution
         }
 
         return currentBest;
-    }
-
-    private static IEnumerable<T[]> Permute<T>(IEnumerable<T> prefix, T[] remainder)
-    {
-        if (!remainder.Any()) return new[]{prefix.ToArray()};
-        return remainder.SelectMany((s, i) => Permute(
-            prefix.Append(s),
-            remainder.Take(i).Concat(remainder.Skip(i + 1)).ToArray()));
     }
 }
