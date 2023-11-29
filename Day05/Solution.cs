@@ -1,5 +1,7 @@
 namespace Day05;
 
+using Shared;
+
 public class Solution
 {
     private readonly IEnumerable<string> input;
@@ -25,12 +27,9 @@ public class Solution
 
     private bool ContainsMirrorTriple(string s)
     {
-        for (int i = 0; i < s.Length - 2; i++)
-        {
-            if (s[i] == s[i + 2]) return true;
-        }
-
-        return false;
+        return s
+            .Windowed(3)
+            .Any(part => part.First() == part.Last());
     }
 
     private bool ContainsDoublePair(string s)
@@ -53,12 +52,9 @@ public class Solution
 
     private bool ContainsDoubleLetter(string s)
     {
-        for (int i = 0; i < s.Length - 1; i++)
-        {
-            if (s[i + 1] == s[i]) return true;
-        }
-
-        return false;
+        return s
+            .Windowed(2)
+            .Any(part => part.First() == part.Last());
     }
 
     private bool ContainsAtLeastThreeVowels(string s)
