@@ -57,7 +57,7 @@ public class Solution : Solver
             .Count;
     }
 
-    private Coordinate2D ParseInstruction(char c) => c switch
+    private static Coordinate2D ParseInstruction(char c) => c switch
     {
         'v' => new Coordinate2D(0, -1),
         '^' => new Coordinate2D(0, 1),
