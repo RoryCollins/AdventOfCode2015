@@ -1,8 +1,6 @@
 namespace Day01;
 
-using Shared;
-
-public class Solution : Solver
+public class Solution
 {
     private readonly string chars = File
         .ReadAllText("input.txt");

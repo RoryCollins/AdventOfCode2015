@@ -1,8 +1,6 @@
 namespace Day05;
 
-using Shared;
-
-public class Solution : Solver
+public class Solution
 {
     private readonly IEnumerable<string> input;
 

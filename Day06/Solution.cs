@@ -3,7 +3,7 @@ namespace Day06;
 using System.Text.RegularExpressions;
 using Shared;
 
-public partial class Solution : Solver
+public partial class Solution
 {
     private readonly IEnumerable<Command> input;
     private readonly HashSet<Coordinate2D> activeLights = new();

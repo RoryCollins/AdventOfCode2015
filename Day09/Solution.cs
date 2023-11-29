@@ -1,8 +1,6 @@
 namespace Day09;
 
-using Shared;
-
-public class Solution : Solver
+public class Solution
 {
     private readonly Dictionary<string, Dictionary<string, int>> graph = new();
     private readonly HashSet<string> locations = new();

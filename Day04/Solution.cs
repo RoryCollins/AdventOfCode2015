@@ -3,9 +3,8 @@ namespace Day04;
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using System.Text;
-using Shared;
 
-public class Solution : Solver
+public class Solution
 {
     private readonly string secretKey;
 

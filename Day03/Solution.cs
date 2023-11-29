@@ -2,7 +2,7 @@ namespace Day03;
 
 using Shared;
 
-public class Solution : Solver
+public class Solution
 {
     private readonly string instructions;
 

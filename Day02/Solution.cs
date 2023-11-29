@@ -1,9 +1,8 @@
 namespace Day02;
 
 using System.Runtime.CompilerServices;
-using Shared;
 
-public class Solution : Solver
+public class Solution
 {
     private readonly IEnumerable<Parcel> parcels;
 

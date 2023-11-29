@@ -1,9 +1,8 @@
 namespace Day08;
 
 using System.Text.RegularExpressions;
-using Shared;
 
-public class Solution : Solver
+public class Solution
 {
     private readonly IEnumerable<string> input;
 

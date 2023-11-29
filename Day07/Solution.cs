@@ -1,9 +1,8 @@
 namespace Day07;
 
 using System.Text.RegularExpressions;
-using Shared;
 
-public class Solution : Solver
+public class Solution
 {
     private readonly Dictionary<string, string> connections = new();
     private Dictionary<string, ushort> signals = new();
