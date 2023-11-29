@@ -24,6 +24,4 @@ public class Solution : Solver
     }
 
     private static int CharacterCount(string arg) => Regex.Match(arg, @"^""(\\x..|\\.|.)*""$").Groups[1].Captures.Count;
-
-    private static int EncodingCharacterCount(string arg) => Regex.Match(arg, @"^""(\\|"")*""$").Groups[1].Captures.Count;
 }

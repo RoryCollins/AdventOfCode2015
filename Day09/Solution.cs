@@ -1,6 +1,5 @@
 namespace Day09;
 
-using System.Collections.Immutable;
 using Shared;
 
 public class Solution : Solver
