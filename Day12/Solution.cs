@@ -28,17 +28,6 @@ public class Solution
     {
         var root = JsonNode.Parse(input)!.Root.AsObject();
         var jsonResult = ProcessJsonObject(root, true);
-        var originalResult = ProcessJsonObject(root, false);
-        // var resultText = RemoveReds(input)
-            // .Replace(",,", ",")
-            // .Replace("[,", "[")
-            // .Replace("{,", "{")
-            // .Replace(":,", ":{},");
-        // var manualResult = ProcessJsonObject(JsonNode.Parse(resultText)!.AsObject(), false);
-
-        File.WriteAllText("original.json", originalResult.ToJsonString());
-        File.WriteAllText("resultJson.json", jsonResult.ToJsonString());
-        // File.WriteAllText("resultText.json", manualResult.ToJsonString());
 
         return SumNumbersInString(jsonResult.ToString());
     }
@@ -68,11 +57,14 @@ public class Solution
                 continue;
             }
 
-            if (haveAtIt && jsonNode.AsValue().ToString() == "red")
+            if (haveAtIt && jsonNode.AsValue()
+                    .ToString() == "red")
             {
                 return new JsonObject();
             }
-            result.Add(i.ToString(), jsonNode.AsValue().ToString());
+
+            result.Add(i.ToString(), jsonNode.AsValue()
+                .ToString());
         }
 
         return result;
@@ -103,46 +95,5 @@ public class Solution
         }
 
         return result;
-    }
-
-    public static string RemoveReds(string s)
-    {
-        s = s.Replace(",\"red\"", ",\"xxx\"")
-            .Replace("\"red\"]", ",\"xxx\"]")
-            .Replace("[\"red\"", "[\"xxx\"");
-        int index;
-        while (true)
-        {
-            index = s.IndexOf(":\"red\"", StringComparison.Ordinal);
-            if (index == -1) break;
-            var prefix = s.Substring(0, index);
-            var suffix = s.Substring(index);
-
-            var lastOpenCurly = FindLastUnclosed('{', '}', prefix);
-            var closure = FindFirstClosed('{', '}', suffix);
-
-            var count = closure + (index - lastOpenCurly) + 1;
-            s = s.Remove(lastOpenCurly, count);
-        }
-
-        return s;
-    }
-
-    public static int FindLastUnclosed(char open, char closure, string s)
-    {
-        var lastOpen = s.LastIndexOf(open);
-        var lastCloseCurly = s.LastIndexOf(closure);
-        return lastOpen > lastCloseCurly || (lastOpen == -1)
-            ? lastOpen
-            : FindLastUnclosed(open, closure, s[..lastOpen]);
-    }
-
-    private static int FindFirstClosed(char open, char closure, string s)
-    {
-        var firstClose = s.IndexOf(closure);
-        var firstOpen = s.IndexOf(open);
-        return firstClose < firstOpen || (firstClose == -1) || (firstOpen == -1)
-            ? firstClose
-            : (firstClose + 1) + FindFirstClosed(open, closure, s[(firstClose + 1)..]);
     }
 }
