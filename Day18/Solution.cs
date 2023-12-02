@@ -6,6 +6,7 @@ public class Solution
 {
     private readonly Dictionary<Coordinate2D, bool> lights = new();
     private static readonly int[] TwoOrThree = { 2, 3 };
+    private bool cornersStuckOn = false;
     private const int XSize = 100;
     private const int YSize = 100;
     private const int Steps = 100;
@@ -21,7 +22,7 @@ public class Solution
         }
     }
 
-    public static Dictionary<Coordinate2D, bool> Next(Dictionary<Coordinate2D, bool> current)
+    public Dictionary<Coordinate2D, bool> Next(Dictionary<Coordinate2D, bool> current)
     {
         var next = new Dictionary<Coordinate2D, bool>();
         foreach (var light in current)
@@ -43,7 +44,10 @@ public class Solution
             next.Add(light.Key, false);
         }
 
-        TurnOnCorners(next);
+        if (cornersStuckOn)
+        {
+            TurnOnCorners(next);
+        }
 
         return next;
     }
@@ -89,6 +93,7 @@ public class Solution
 
     public object PartTwo()
     {
+        cornersStuckOn = true;
         TurnOnCorners(lights);
         return PartOne();
     }
