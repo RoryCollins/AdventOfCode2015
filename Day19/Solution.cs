@@ -1,14 +1,11 @@
 namespace Day19;
 
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
 public class Solution
 {
     private readonly Dictionary<string, List<string>> lookup = new();
-    private readonly Dictionary<string, string> reverseLookup = new();
-    private static string text;
+    private static string text = string.Empty;
 
     public Solution(List<string> input)
     {
@@ -22,20 +19,24 @@ public class Solution
                 ? v
                 : new List<string>();
             lookup[entry[0]] = list.Append(entry[1]).ToList();
-            reverseLookup.Add(entry[1], entry[0]);
         }
 
-        text = input[^1]!;
+        text = input[^1];
     }
 
     public object PartOne()
     {
-        return AvailableTranscodes(text).Count;
+        return AvailableTranscodes(text)
+            .Count;
     }
 
     public object PartTwo()
     {
-        return Resolve("ORnPBPMgArCaCaCa").ToString();
+        var elementCount = Regex.Count(text, "[A-Z][a-z]?");
+        var rnArCount = Regex.Count(text, "Rn|Ar");
+        var yCount = Regex.Count(text, "Y");
+
+        return $"{elementCount} - {rnArCount} - 2*{yCount} - 1 = {elementCount-rnArCount-(2*yCount)-1}";
     }
 
     private HashSet<string> AvailableTranscodes(string current)
@@ -47,51 +48,18 @@ public class Solution
             var remainder = current[i..];
             foreach (var (entry, replacements) in lookup)
             {
-                if (remainder.StartsWith(entry, StringComparison.Ordinal))
+                if (!remainder.StartsWith(entry, StringComparison.Ordinal)) continue;
+                foreach (var it in replacements)
                 {
-                    foreach (var it in replacements)
-                    {
-                        var r = entry.Length > remainder.Length
-                            ? ""
-                            : remainder[entry.Length..];
-                        var str = prefix + it + r;
-                        molecules.Add(str);
-                    }
+                    var r = entry.Length > remainder.Length
+                        ? ""
+                        : remainder[entry.Length..];
+                    var str = prefix + it + r;
+                    molecules.Add(str);
                 }
             }
         }
 
         return molecules;
     }
-
-    private string Resolve(string s)
-    {
-        var foo = s.LastIndexOf("Ar", StringComparison.Ordinal);
-        if (foo == -1) return s;
-
-        var bar = FindLastUnclosed("Rn", "Ar", s[..foo]);
-        var compound = s[(bar+2)..foo];
-        var internalElements = compound.Split('Y');
-
-
-        return s.Substring(0, bar+2) + s.Substring(foo);
-    }
-
-    private (string, int) Reduce(string s, int count)
-    {
-        if (!reverseLookup.Keys.Any(s.Contains)) return (s, count);
-        foreach (var entry in reverseLookup.Where(e => s.Contains(e.Key)))
-        {
-
-        }
-    }
-
-    private static int FindLastUnclosed(string open, string closure, string s)
-        {
-            var lastOpen = s.LastIndexOf(open, StringComparison.Ordinal);
-            var lastClose = s.LastIndexOf(closure, StringComparison.Ordinal);
-            return lastOpen > lastClose || (lastOpen == -1)
-                ? lastOpen
-                : FindLastUnclosed(open, closure, s[..lastOpen]);
-        }
 }
