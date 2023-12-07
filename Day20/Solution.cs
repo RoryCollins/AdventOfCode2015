@@ -21,12 +21,12 @@ public class Solution
 
     private static int SieveIt(int target, int presentsPerElf, int? elfLimit = null)
     {
-        var max = 1_300_000;
+        const int max = 1_300_000;
 
         var houses = new int[max];
-        for (int i = 1; i < target/presentsPerElf; i++)
+        for (var i = 1; i < target/presentsPerElf; i++)
         {
-            for (int j = 1; j <= (elfLimit ?? target/i); j++)
+            for (var j = 1; j <= (elfLimit ?? target/i); j++)
             {
                 var currentHouse = i * j;
                 if(currentHouse >= max) continue;
