@@ -41,36 +41,24 @@ public class Solution
 
     public object PartOne()
     {
-        Fighter player;
-        var minimumCost = int.MaxValue;
         var possibleArmours = armours.Concat(new[] { Item.NoItem })
             .ToList();
         var possibleRings = rings
             .ChooseTwo()
             .Concat(rings.Select(r => (Item.NoItem, r)))
-            .Concat(new[] { (Item.NoItem, Item.NoItem) })
+            .Concat(new[] { (ring1: Item.NoItem, ring2: Item.NoItem) })
             .ToList();
 
-        foreach (var weapon in weapons)
-        {
-            foreach (var armour in possibleArmours)
+        return weapons.SelectMany(w => possibleArmours.SelectMany(a => possibleRings.Select(r =>
             {
-                foreach (var ringPair in possibleRings)
-                {
-                    var totalCost = weapon.Cost + armour.Cost + ringPair.Item1.Cost + ringPair.Item2.Cost;
-                    var totalDamage = weapon.Damage + ringPair.Item1.Damage + ringPair.Item2.Damage;
-                    var totalArmour = armour.Armour + ringPair.Item1.Armour + ringPair.Item2.Armour;
-                    if (totalCost > minimumCost) continue;
-                    player = new Fighter(100, totalDamage, totalArmour);
-                    if (Fight(player, boss))
-                    {
-                        minimumCost = totalCost;
-                    }
-                }
-            }
-        }
-
-        return minimumCost;
+                var totalCost = w.Cost + a.Cost + r.Item1.Cost + r.Item2.Cost;
+                var totalDamage = w.Damage + r.Item1.Damage + r.Item2.Damage;
+                var totalArmour = a.Armour + r.Item1.Armour + r.Item2.Armour;
+                return (totalCost, totalArmour, totalDamage);
+            })))
+            .OrderBy(it => it.totalCost)
+            .First(it => isPlayerAlive(new Fighter(100, it.totalDamage, it.totalArmour), boss))
+            .totalCost;
     }
 
     public object PartTwo()
@@ -78,12 +66,18 @@ public class Solution
         return "Not yet implemented";
     }
 
-    private static bool Fight(Fighter player, Fighter boss)
+    // private static bool Fight(Fighter player, Fighter boss)
+    // {
+    //     int damageReceived = Math.Max((boss.Damage - player.Armour), 1);
+    //     int damageDealt = Math.Max((player.Damage - boss.Armour), 1);
+    //     return player.Hp / damageReceived >= boss.Hp / damageDealt;
+    // }
+
+    Func<Fighter, Fighter, bool> isPlayerAlive = (player, boss) =>
     {
-        int damageReceived = Math.Max((boss.Damage - player.Armour), 1);
-        int damageDealt = Math.Max((player.Damage - boss.Armour), 1);
-        return player.Hp / damageReceived >= boss.Hp / damageDealt;
-    }
+        var turnsToKillBoss = (int)Math.Ceiling(boss.Hp / (double)(player.Damage - boss.Armour));
+        return player.Hp - (boss.Damage - player.Armour) * (turnsToKillBoss - 1) >= 0;
+    };
 }
 
 internal class Fighter
